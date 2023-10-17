@@ -1,6 +1,7 @@
 using System.Data.SqlClient;
 using Common.Utilities;
 using Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;
