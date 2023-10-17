@@ -1,18 +1,13 @@
-using System.Data.SqlClient;
 using Common.Utilities;
 using Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;
 
 public class ApplicationDbContext: DbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-        optionsBuilder.UseSqlServer(new SqlConnectionStringBuilder() {
-            DataSource = "localhost", InitialCatalog = "blog", UserID = "sa", Password = "Pa55w0rd",
-        }.ConnectionString);
-
+    public ApplicationDbContext(DbContextOptions options) : base(options) { }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
