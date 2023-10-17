@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities;
 
-/**
- * Each entity class implement this interface
- * EntityFramework make table for that class
- */
+// Each entity class implement this interface
+// EntityFramework make table for that class
 public interface IEntity
 {
 }

@@ -13,13 +13,13 @@ public class Post: BaseEntity<Guid>
     
     public int AuthorId { get; set; }
     
-    /** This is: Navigation Property */
+    // This is: Navigation Property
     public Category Category { get; set; }
     
     public User Author { get; set; }
 }
 
-/** This is: FluentApi */
+// This is: FluentApi 
 public class PostConfiguration : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> builder)
