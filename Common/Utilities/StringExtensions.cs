@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Common.Utilities;
 
 public static class StringExtensions

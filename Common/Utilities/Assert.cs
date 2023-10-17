@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Linq;
 
 namespace Common.Utilities;
 
@@ -8,7 +10,7 @@ public static class Assert
         where T : class
     {
         if (obj is null)
-            throw new ArgumentNullException($"{name} : {typeof(T)}" , message);
+            throw new ArgumentNullException($"{name} : {typeof(T)}", message);
     }
 
     public static void NotNull<T>(T? obj, string name, string message = null)
@@ -16,7 +18,6 @@ public static class Assert
     {
         if (!obj.HasValue)
             throw new ArgumentNullException($"{name} : {typeof(T)}", message);
-
     }
 
     public static void NotEmpty<T>(T obj, string name, string message = null, T defaultValue = null)
