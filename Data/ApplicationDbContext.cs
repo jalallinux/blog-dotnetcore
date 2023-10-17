@@ -6,8 +6,12 @@ namespace Data;
 
 public class ApplicationDbContext: DbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options) { }
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -24,7 +28,7 @@ public class ApplicationDbContext: DbContext
         modelBuilder.AddRestrictDeleteBehaviorConvention();
         
         // Change Guid ID column type default value to NEWSEQUENTIALID 
-        modelBuilder.AddSequentialGuidForIdConvention();
+        // modelBuilder.AddSequentialGuidForIdConvention();
         
         // Pluralizing entities tables name
         modelBuilder.AddPluralizingTableNameConvention();
