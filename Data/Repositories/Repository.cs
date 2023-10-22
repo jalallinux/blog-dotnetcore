@@ -21,7 +21,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
 
     #region Async Method
 
-    public virtual Task<TEntity?> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
+    public virtual Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
     {
         return Entities.FindAsync(ids, cancellationToken).AsTask();
     }

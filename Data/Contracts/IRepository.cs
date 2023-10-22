@@ -32,7 +32,7 @@ public interface IRepository<TEntity> where TEntity : class, IEntity
     
     TEntity GetById(params object[] ids);
     
-    Task<TEntity?> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
+    Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
 
     void LoadCollection<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> collectionProperty)
         where TProperty : class;
