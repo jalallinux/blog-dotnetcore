@@ -8,8 +8,8 @@ public class ApplicationDbContext: DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
-        optionsBuilder.UseSqlServer("Server=localhost;Database=test;User Id=sa;Password=Pa55w0rd");
+        optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
+        // optionsBuilder.UseSqlServer("Server=localhost;Database=test;User Id=sa;Password=Pa55w0rd");
         base.OnConfiguring(optionsBuilder);
     }
 
@@ -29,7 +29,7 @@ public class ApplicationDbContext: DbContext
         modelBuilder.AddRestrictDeleteBehaviorConvention();
         
         // Change Guid ID column type default value to NEWSEQUENTIALID 
-        modelBuilder.AddSequentialGuidForIdConvention();
+        // modelBuilder.AddSequentialGuidForIdConvention();
         
         // Pluralizing entities tables name
         modelBuilder.AddPluralizingTableNameConvention();
