@@ -68,6 +68,5 @@ public class UserController : ControllerBase
             return NotFound();
 
         await _userRepository.DeleteAsync(targetUser, cancellationToken);
-        return Content("User successfully deleted.");
-    }
+        return Content("User successfully deleted."); }
 }

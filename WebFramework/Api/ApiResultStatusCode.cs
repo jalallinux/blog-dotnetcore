@@ -13,7 +13,7 @@ public enum ApiResultStatusCode
     [Display(Name = "The parameters are not valid.")]
     BadRequest = 2,
     
-    [Display(Name = "Not found")]
+    [Display(Name = "Entity not found")]
     NotFound = 3,
     
     [Display(Name = "The list is empty")]
