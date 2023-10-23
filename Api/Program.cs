@@ -1,5 +1,7 @@
+using Data;
 using Data.Contracts;
 using Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;")
+);
+
 // Register repository classes
-// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();

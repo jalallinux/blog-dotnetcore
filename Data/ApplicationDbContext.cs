@@ -6,12 +6,16 @@ namespace Data;
 
 public class ApplicationDbContext: DbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public ApplicationDbContext(DbContextOptions options) : base(options)
     {
-        optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
-        // optionsBuilder.UseSqlServer("Server=localhost;Database=test;User Id=sa;Password=Pa55w0rd");
-        base.OnConfiguring(optionsBuilder);
     }
+    
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
+    //     optionsBuilder.UseSqlServer("Server=localhost;Database=test;User Id=sa;Password=Pa55w0rd");
+    //     base.OnConfiguring(optionsBuilder);
+    // }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
