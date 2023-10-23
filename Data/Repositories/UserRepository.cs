@@ -2,6 +2,7 @@
 using Data.Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Data.Repositories;
 
@@ -17,7 +18,7 @@ public class UserRepository: Repository<User>, IUserRepository
         return Table.Where(u => u.UserName == username && u.PasswordHash == passwordHash).SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task AddAsync(User user, string password, CancellationToken cancellationToken)
+    public async Task<EntityEntry<User>> AddAsync(User user, string password, CancellationToken cancellationToken)
     {
         var exists = await TableNoTracking.AnyAsync(p => p.UserName == user.UserName);
         if (exists)
@@ -25,6 +26,6 @@ public class UserRepository: Repository<User>, IUserRepository
 
         var passwordHash = SecurityHelper.GetSha256Hash(password);
         user.PasswordHash = passwordHash;
-        await base.AddAsync(user, cancellationToken);
+        return await base.AddAsync(user, cancellationToken);
     }
 }

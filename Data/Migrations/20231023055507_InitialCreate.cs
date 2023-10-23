@@ -57,7 +57,7 @@ namespace Data.Migrations
                     Age = table.Column<int>(type: "integer", nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    LastLoginDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    LastLoginDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

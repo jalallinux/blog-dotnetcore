@@ -22,7 +22,7 @@ namespace Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.Category", b =>
+            modelBuilder.Entity("Entities.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Entities.Post", b =>
+            modelBuilder.Entity("Entities.Models.Post", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,7 +75,7 @@ namespace Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Entities.Role", b =>
+            modelBuilder.Entity("Entities.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +98,7 @@ namespace Data.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Entities.User", b =>
+            modelBuilder.Entity("Entities.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,7 +120,7 @@ namespace Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset>("LastLoginDate")
+                    b.Property<DateTimeOffset?>("LastLoginDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PasswordHash")
@@ -138,24 +138,24 @@ namespace Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Entities.Category", b =>
+            modelBuilder.Entity("Entities.Models.Category", b =>
                 {
-                    b.HasOne("Entities.Category", "Parent")
+                    b.HasOne("Entities.Models.Category", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Entities.Post", b =>
+            modelBuilder.Entity("Entities.Models.Post", b =>
                 {
-                    b.HasOne("Entities.User", "Author")
+                    b.HasOne("Entities.Models.User", "Author")
                         .WithMany("Posts")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Entities.Category", "Category")
+                    b.HasOne("Entities.Models.Category", "Category")
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -166,14 +166,14 @@ namespace Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Entities.Category", b =>
+            modelBuilder.Entity("Entities.Models.Category", b =>
                 {
                     b.Navigation("Children");
 
                     b.Navigation("Posts");
                 });
 
-            modelBuilder.Entity("Entities.User", b =>
+            modelBuilder.Entity("Entities.Models.User", b =>
                 {
                     b.Navigation("Posts");
                 });

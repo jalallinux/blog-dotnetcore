@@ -24,9 +24,9 @@ public class User: BaseEntity
     
     public bool IsActive { get; set; }
     
-    public DateTimeOffset LastLoginDate { get; set; }
+    public DateTimeOffset? LastLoginDate { get; set; }
 
-    public ICollection<Post> Posts { get; set; }
+    public ICollection<Post>? Posts { get; set; }
     
 
     public enum GenderType

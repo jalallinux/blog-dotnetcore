@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Data.Contracts;
 using Entities.Contracts;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Data.Repositories;
 
@@ -26,12 +27,14 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         return Entities.FindAsync(ids, cancellationToken).AsTask();
     }
 
-    public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true)
+    public virtual async Task<EntityEntry<TEntity>> AddAsync(TEntity entity, CancellationToken cancellationToken,
+        bool saveNow = true)
     {
         Assert.NotNull(entity, nameof(entity));
-        await Entities.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+        var newEntity = await Entities.AddAsync(entity, cancellationToken).ConfigureAwait(false);
         if (saveNow)
             await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return newEntity;
     }
 
     public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
@@ -42,12 +45,14 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
             await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true)
+    public virtual async Task<EntityEntry<TEntity>> UpdateAsync(TEntity entity, CancellationToken cancellationToken,
+        bool saveNow = true)
     {
         Assert.NotNull(entity, nameof(entity));
-        Entities.Update(entity);
+        var editedEntity = Entities.Update(entity);
         if (saveNow)
             await DbContext.SaveChangesAsync(cancellationToken);
+        return editedEntity;
     }
 
     public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken,

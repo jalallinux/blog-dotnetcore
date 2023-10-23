@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Data.Contracts;
 
@@ -12,7 +13,7 @@ public interface IRepository<TEntity> where TEntity : class, IEntity
 
     void Add(TEntity entity, bool saveNow = true);
     
-    Task AddAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true);
+    Task<EntityEntry<TEntity>> AddAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true);
     
     void AddRange(IEnumerable<TEntity> entities, bool saveNow = true);
     
@@ -49,7 +50,7 @@ public interface IRepository<TEntity> where TEntity : class, IEntity
 
     void Update(TEntity entity, bool saveNow = true);
     
-    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true);
+    Task<EntityEntry<TEntity>> UpdateAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true);
     
     void UpdateRange(IEnumerable<TEntity> entities, bool saveNow = true);
     

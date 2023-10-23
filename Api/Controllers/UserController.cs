@@ -1,5 +1,6 @@
 using Data.Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,20 +25,21 @@ public class UserController
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<User>> Show(FromRouteAttribute id, CancellationToken cancellationToken)
+    public async Task<ActionResult<User>> Show(int id, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(cancellationToken, id);
         return user;
     }
 
     [HttpPost]
-    public async Task Store(User user, CancellationToken cancellationToken)
+    public async Task<User> Store(User user, CancellationToken cancellationToken)
     {
-        await _userRepository.AddAsync(user, cancellationToken);
+        var newUser = await _userRepository.AddAsync(user, cancellationToken);
+        return newUser.Entity;
     }
 
     [HttpPut("{id:int}")]
-    public async Task Update(int id, User user, CancellationToken cancellationToken)
+    public async Task<User> Update(int id, User user, CancellationToken cancellationToken)
     {
         var targetUser = await _userRepository.GetByIdAsync(cancellationToken, id);
 
@@ -49,9 +51,8 @@ public class UserController
         targetUser.IsActive = user.IsActive;
         targetUser.LastLoginDate = user.LastLoginDate;
 
-        await _userRepository.UpdateAsync(targetUser, cancellationToken);
-        
-        // return Ok();
+        var editedEntity = await _userRepository.UpdateAsync(targetUser, cancellationToken);
+        return editedEntity.Entity;
     }
 
     [HttpDelete("{id:int}")]
