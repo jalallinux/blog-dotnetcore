@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Entities.Contracts;
 
-namespace Entities;
+namespace Entities.Models;
 
 public class Role: BaseEntity
 {

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Entities.Contracts;
 
-namespace Entities;
+namespace Entities.Models;
 
 public class Category: BaseEntity
 {

@@ -1,6 +1,6 @@
 ﻿using Common.Utilities;
 using Data.Contracts;
-using Entities;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;

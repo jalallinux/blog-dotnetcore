@@ -1,8 +1,8 @@
 ﻿using Common.Utilities;
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Data.Contracts;
+using Entities.Contracts;
 
 namespace Data.Repositories;
 

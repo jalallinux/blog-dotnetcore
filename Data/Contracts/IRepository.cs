@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Entities;
+using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Contracts;

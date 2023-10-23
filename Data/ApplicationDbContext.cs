@@ -1,5 +1,5 @@
 using Common.Utilities;
-using Entities;
+using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Entities;
+namespace Entities.Contracts;
 
 // Each entity class implement this interface
 // EntityFramework make table for that class

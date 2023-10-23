@@ -1,8 +1,9 @@
 using System;
+using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Entities;
+namespace Entities.Models;
 
 public class Post: BaseEntity<Guid>
 {
