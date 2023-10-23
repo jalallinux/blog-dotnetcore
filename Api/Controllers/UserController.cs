@@ -3,12 +3,14 @@ using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebFramework.Api;
+using WebFramework.Filters;
 
 namespace Api.Controllers;
 
-[ApiController]
 [Route(("api/user"))]
-public class UserController
+[ApiResultFilter]
+[ApiController]
+public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
 
@@ -21,28 +23,21 @@ public class UserController
     public async Task<ApiResult<List<User>>> Index()
     {
         var users = await _userRepository.TableNoTracking.ToListAsync();
-        return new ApiResult<List<User>>
-        {
-            Data = users, Message = "List successfully fetched."
-        };
+        return users;
     }
 
     [HttpGet("{id:int}")]
     public async Task<ApiResult<User>> Show(int id, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(cancellationToken, id);
-        return new ApiResult<User>{
-            Data = user, Message = "User details successfully fetched."
-        };
+        return user == null ? NotFound() : user;
     }
 
     [HttpPost]
     public async Task<ApiResult<User>> Store(User user, CancellationToken cancellationToken)
     {
         var newUser = await _userRepository.AddAsync(user, cancellationToken);
-        return new ApiResult<User>{
-            Data = newUser.Entity, Message = "User successfully created."
-        };
+        return newUser.Entity;
     }
 
     [HttpPut("{id:int}")]
@@ -50,6 +45,9 @@ public class UserController
     {
         var targetUser = await _userRepository.GetByIdAsync(cancellationToken, id);
 
+        if (targetUser == null)
+            return NotFound();
+        
         targetUser.UserName = user.UserName;
         targetUser.PasswordHash = user.PasswordHash;
         targetUser.FullName = user.FullName;
@@ -59,19 +57,17 @@ public class UserController
         targetUser.LastLoginDate = user.LastLoginDate;
 
         var editedEntity = await _userRepository.UpdateAsync(targetUser, cancellationToken);
-        return new ApiResult<User>{
-            Data = editedEntity.Entity, Message = "User details successfully updated."
-        };
+        return editedEntity.Entity;
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ApiResult> Destroy(int id, CancellationToken cancellationToken)
     {
         var targetUser = await _userRepository.GetByIdAsync(cancellationToken, id);
+        if (targetUser == null)
+            return NotFound();
+
         await _userRepository.DeleteAsync(targetUser, cancellationToken);
-        
-        return new ApiResult{
-            Message = "User successfully deleted."
-        };
+        return Content("User successfully deleted.");
     }
 }

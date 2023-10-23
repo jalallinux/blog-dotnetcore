@@ -31,9 +31,9 @@ public interface IRepository<TEntity> where TEntity : class, IEntity
     
     void Detach(TEntity entity);
     
-    TEntity GetById(params object[] ids);
+    TEntity? GetById(params object[] ids);
     
-    Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
+    Task<TEntity?> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
 
     void LoadCollection<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> collectionProperty)
         where TProperty : class;
