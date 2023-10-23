@@ -20,7 +20,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ApiResult<List<User>>> Index()
+    public async Task<List<User>> Index()
     {
         var users = await _userRepository.TableNoTracking.ToListAsync();
         return users;
@@ -30,14 +30,14 @@ public class UserController : ControllerBase
     public async Task<ApiResult<User>> Show(int id, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(cancellationToken, id);
-        return user == null ? NotFound() : user;
+        return user == null ? NotFound() : Ok(user);
     }
 
     [HttpPost]
     public async Task<ApiResult<User>> Store(User user, CancellationToken cancellationToken)
     {
         var newUser = await _userRepository.AddAsync(user, cancellationToken);
-        return newUser.Entity;
+        return Ok(newUser.Entity);
     }
 
     [HttpPut("{id:int}")]
@@ -57,7 +57,7 @@ public class UserController : ControllerBase
         targetUser.LastLoginDate = user.LastLoginDate;
 
         var editedEntity = await _userRepository.UpdateAsync(targetUser, cancellationToken);
-        return editedEntity.Entity;
+        return Ok(editedEntity.Entity);
     }
 
     [HttpDelete("{id:int}")]
