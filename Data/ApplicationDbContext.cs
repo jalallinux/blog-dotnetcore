@@ -1,25 +1,33 @@
 using Common.Utilities;
 using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Data;
 
 public class ApplicationDbContext: DbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    protected readonly IConfiguration Configuration;
+
+    public ApplicationDbContext()
     {
     }
     
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
-    //     optionsBuilder.UseSqlServer("Server=localhost;Database=test;User Id=sa;Password=Pa55w0rd");
-    //     base.OnConfiguring(optionsBuilder);
-    // }
+    public ApplicationDbContext(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
+        optionsBuilder.UseSqlServer("Server=localhost,1433;Database=test;User=sa;Password=Pa55w0rd;TrustServerCertificate=true;");
+        // base.OnConfiguring(optionsBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        // base.OnModelCreating(modelBuilder);
 
         var entitiesAssembly = typeof(IEntity).Assembly;
         
