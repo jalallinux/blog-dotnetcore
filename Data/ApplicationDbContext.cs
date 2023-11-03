@@ -1,28 +1,13 @@
 using Common.Utilities;
 using Entities.Contracts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Data;
 
 public class ApplicationDbContext: DbContext
 {
-    protected readonly IConfiguration Configuration;
-
-    public ApplicationDbContext()
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
     {
-    }
-    
-    public ApplicationDbContext(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=test;Username=postgres;Password=postgres;");
-        optionsBuilder.UseSqlServer("Server=localhost,1433;Database=test;User=sa;Password=Pa55w0rd;TrustServerCertificate=true;");
-        // base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,7 +26,7 @@ public class ApplicationDbContext: DbContext
         modelBuilder.AddRestrictDeleteBehaviorConvention();
         
         // Change Guid ID column type default value to NEWSEQUENTIALID 
-        // modelBuilder.AddSequentialGuidForIdConvention();
+        modelBuilder.AddSequentialGuidForIdConvention();
         
         // Pluralizing entities tables name
         modelBuilder.AddPluralizingTableNameConvention();
