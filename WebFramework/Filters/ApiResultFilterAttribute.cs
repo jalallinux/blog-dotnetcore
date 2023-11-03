@@ -25,11 +25,12 @@ public class ApiResultFilterAttribute : ActionFilterAttribute
         }
         else if (context.Result is BadRequestObjectResult badRequestObjectResult)
         {
-            var message = badRequestObjectResult.Value.ToString();
-            if (badRequestObjectResult.Value is SerializableError errors)
+            var message = badRequestObjectResult.Value!.ToString();
+            Dictionary<string, string[]>? errs = (Dictionary<string, string[]>)badRequestObjectResult.Value.GetType()
+                .GetProperty("Errors")?.GetValue(badRequestObjectResult.Value, null)!;
+            if (errs.Count > 0)
             {
-                var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
-                message = string.Join(" | ", errorMessages);
+                message = string.Join(" | ", errs.SelectMany(p => p.Value).Distinct());
             }
 
             var apiResult = new ApiResult(false, ApiResultStatusCode.BadRequest, message);

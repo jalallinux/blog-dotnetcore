@@ -1,3 +1,4 @@
+using Api.Requests.User;
 using Data.Contracts;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,7 @@ using WebFramework.Filters;
 
 namespace Api.Controllers;
 
-[Route(("api/user"))]
-[ApiResultFilter]
-[ApiController]
+[ApiController, ApiResultFilter, Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
@@ -27,27 +26,41 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ApiResult<User>> Show(int id, CancellationToken cancellationToken)
+    public async Task<ApiResult<User>> Show([FromRoute] int id, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(cancellationToken, id);
         return user == null ? NotFound() : Ok(user);
     }
 
     [HttpPost]
-    public async Task<ApiResult<User>> Store(User user, CancellationToken cancellationToken)
+    public async Task<ApiResult<User>> Store([FromBody] UserStoreRequest request, CancellationToken cancellationToken)
     {
-        var newUser = await _userRepository.AddAsync(user, cancellationToken);
+        var exist = await _userRepository.TableNoTracking.AnyAsync(u => u.UserName == request.UserName);
+        if (exist)
+        {
+            return BadRequest("Username is invalid");
+        }
+
+        var user = new User
+        {
+            Age = request.Age,
+            FullName = request.FullName,
+            UserName = request.UserName,
+            Gender = request.Gender
+        };
+        var newUser = await _userRepository.AddAsync(user, request.Password, cancellationToken);
         return Ok(newUser.Entity);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ApiResult<User>> Update(int id, User user, CancellationToken cancellationToken)
+    public async Task<ApiResult<User>> Update([FromRoute] int id, [FromBody] User user,
+        CancellationToken cancellationToken)
     {
         var targetUser = await _userRepository.GetByIdAsync(cancellationToken, id);
 
         if (targetUser == null)
             return NotFound();
-        
+
         targetUser.UserName = user.UserName;
         targetUser.PasswordHash = user.PasswordHash;
         targetUser.FullName = user.FullName;
@@ -61,12 +74,13 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ApiResult> Destroy(int id, CancellationToken cancellationToken)
+    public async Task<ApiResult> Destroy([FromRoute] int id, CancellationToken cancellationToken)
     {
         var targetUser = await _userRepository.GetByIdAsync(cancellationToken, id);
         if (targetUser == null)
             return NotFound();
 
         await _userRepository.DeleteAsync(targetUser, cancellationToken);
-        return Content("User successfully deleted."); }
+        return Content("User successfully deleted.");
+    }
 }
